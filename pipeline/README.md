@@ -25,21 +25,32 @@ Steps to create a pipeline:
 ![TLSVERIFYFALSE](https://user-images.githubusercontent.com/36239840/133588009-d3b37815-d268-4cea-aedd-8e3dbc989514.JPG)
 
 
-## Create project
+## Create project & Service account
 Create a project for the sample application that you will be using in this tutorial:
 ```
-oc new-project my-pipelines-project
+oc new-project ci-env
+oc new-project dev-env
+oc new-project stage-env
 ```
 Run the following command to see the pipeline service account:
 ```
 oc get serviceaccount pipeline
 ```
+
+```
+oc adm policy add-scc-to-user privileged system:serviceaccount:env-ci:pipeline -n ci-env
+oc adm policy add-scc-to-user privileged system:serviceaccount:env-ci:pipeline -n dev-env
+oc adm policy add-scc-to-user privileged system:serviceaccount:env-ci:pipeline -n stage-env
+oc adm policy add-role-to-user edit system:serviceaccount:env-ci:pipeline -n ci-env
+oc adm policy add-role-to-user edit system:serviceaccount:env-ci:pipeline -n dev-env
+oc adm policy add-role-to-user edit system:serviceaccount:env-ci:pipeline -n stage-env
+```
 ## Create Tasks
 ```
-oc create -f https://raw.githubusercontent.com/shirosheroics/E2E_Example/tekton-pipeline-setup/pipeline/tasks/apply-manifest-task.yaml
+oc create -f https://raw.githubusercontent.com/shirosheroics/E2E_Example/tekton-pipeline-setup/pipeline/tasks/apply-manifest-task.yaml -n ci-env
 ```
 ```
-oc create -f https://raw.githubusercontent.com/shirosheroics/E2E_Example/tekton-pipeline-setup/pipeline/tasks/update-deployment-task.yaml
+oc create -f https://raw.githubusercontent.com/shirosheroics/E2E_Example/tekton-pipeline-setup/pipeline/tasks/update-deployment-task.yaml -n ci-env
 ```
 ```
 tkn task ls
@@ -49,14 +60,14 @@ tkn clustertask ls
 ```
 ## Create Pipeline & Pipeline Resources
 ```
-oc create -f https://raw.githubusercontent.com/shirosheroics/E2E_Example/tekton-pipeline-setup/pipeline/pipeline.yaml
+oc create -f https://raw.githubusercontent.com/shirosheroics/E2E_Example/tekton-pipeline-setup/pipeline/pipeline.yaml -n ci-env
 ```
 ```
 tkn pipeline ls
 ```
 ## Create PersistentVolumeClaim (PVC)
 ```
-oc create -f https://raw.githubusercontent.com/shirosheroics/E2E_Example/tekton-pipeline-setup/pipeline/pvc.yaml
+oc create -f https://raw.githubusercontent.com/shirosheroics/E2E_Example/tekton-pipeline-setup/pipeline/pvc.yaml -n ci-env
 ```
 ```
 oc get pvc
