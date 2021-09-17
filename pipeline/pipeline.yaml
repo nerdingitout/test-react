@@ -52,6 +52,21 @@ spec:
       workspace: shared-workspace
     runAfter:
     - fetch-repository
+    - name: test-app
+    taskRef:
+      name: test-app
+    params:
+      - name: APP_NAME
+        value: "react-ui"
+      - name: APP_VERSION
+        value: "1.0"
+      - name: DEPLOY_PROJECT
+        value: "dev-env"
+    workspaces:
+    - name: source
+      workspace: shared-workspace
+    runAfter:
+    - build-image
   - name: apply-manifests
     taskRef:
       name: apply-manifests
@@ -59,7 +74,7 @@ spec:
     - name: source
       workspace: shared-workspace
     runAfter:
-    - build-image
+    - test-app
   - name: update-deployment
     taskRef:
       name: update-deployment
