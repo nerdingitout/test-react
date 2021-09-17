@@ -6,3 +6,4 @@ COPY ./e2e-frontend/package*.json ./
 RUN npm install 
 
 COPY ./e2e-frontend . 
+EXPOSE 3000
