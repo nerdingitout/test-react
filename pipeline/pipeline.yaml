@@ -51,7 +51,7 @@ spec:
     - name: source
       workspace: shared-workspace
     runAfter:
-    - fetch-repository
+    - clone-repository
     - name: test-app
     taskRef:
       name: test-app
