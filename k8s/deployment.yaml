@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: react-ui
+  name: react-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-ui
+  template:
+    metadata:
+      labels:
+        app: react-ui
+    spec:
+      containers:
+        - image: https://quay.io/repository/kubernetes-ingress-controller/nginx-ingress-controller:latest
+          imagePullPolicy: Always
+          name: react-ui
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+            - containerPort: 9090
+              protocol: TCP
+          env:
+            - name: DJANGO_API_SERVICE_HOST
+              value: django-api
+            - name: DJANGO_API_SERVICE_PORT
+              value: "9000"
