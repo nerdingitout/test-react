@@ -7,4 +7,4 @@ RUN npm install
 
 COPY ./e2e-frontend . 
 EXPOSE 3000
-CMD ['npm start']
+CMD ["npm", "start"]
