@@ -74,7 +74,7 @@ oc get pvc
 ```
 ## Trigger Pipeline
 ```
-tkn start pipeline e2e-pipeline
+tkn pipeline start e2e-pipeline
 ```
 ```
 tkn pipelinerun ls
