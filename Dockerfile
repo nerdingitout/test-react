@@ -9,7 +9,6 @@ RUN adduser node root
 
 COPY ./e2e-frontend . 
 
-RUN yarn install --production
 RUN chmod -R 775 /e2e-app
 RUN chown -R node:root /e2e-app
 
