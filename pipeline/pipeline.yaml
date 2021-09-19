@@ -64,12 +64,14 @@ spec:
     workspaces:
       - name: source
         workspace: shared-workspace
-  - name: update-deployment
+  - name: update-deployment-dev
     params:
       - name: deployment
         value: $(params.deployment-name)
       - name: IMAGE
         value: $(params.IMAGE)
+      - name: project-name
+        value: dev-env
     runAfter:
       - dev-apply-manifests
     taskRef:
@@ -84,7 +86,7 @@ spec:
       - name: DEPLOY_PROJECT
         value: dev-env
     runAfter:
-      - update-deployment
+      - update-deployment-dev
     taskRef:
       kind: Task
       name: test-app
@@ -103,3 +105,16 @@ spec:
     workspaces:
       - name: source
         workspace: shared-workspace
+  - name: update-deployment-stage
+    params:
+      - name: deployment
+        value: $(params.deployment-name)
+      - name: IMAGE
+        value: $(params.IMAGE)
+      - name: project-name
+        value: stage-env
+    runAfter:
+      - promote-stage
+    taskRef:
+      kind: Task
+      name: update-deployment
