@@ -38,12 +38,12 @@ oc get serviceaccount pipeline
 ```
 
 ```
-oc adm policy add-scc-to-user privileged system:serviceaccount:env-ci:pipeline -n ci-env
-oc adm policy add-scc-to-user privileged system:serviceaccount:env-ci:pipeline -n dev-env
-oc adm policy add-scc-to-user privileged system:serviceaccount:env-ci:pipeline -n stage-env
-oc adm policy add-role-to-user edit system:serviceaccount:env-ci:pipeline -n ci-env
-oc adm policy add-role-to-user edit system:serviceaccount:env-ci:pipeline -n dev-env
-oc adm policy add-role-to-user edit system:serviceaccount:env-ci:pipeline -n stage-env
+oc adm policy add-scc-to-user privileged system:serviceaccount:ci-env:pipeline -n ci-env
+oc adm policy add-scc-to-user privileged system:serviceaccount:ci-env:pipeline -n dev-env
+oc adm policy add-scc-to-user privileged system:serviceaccount:ci-env:pipeline -n stage-env
+oc adm policy add-role-to-user edit system:serviceaccount:ci-env:pipeline -n ci-env
+oc adm policy add-role-to-user edit system:serviceaccount:ci-env:pipeline -n dev-env
+oc adm policy add-role-to-user edit system:serviceaccount:ci-env:pipeline -n stage-env
 ```
 ## Create Tasks
 ```
