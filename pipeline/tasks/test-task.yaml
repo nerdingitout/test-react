@@ -26,3 +26,5 @@ spec:
         args:
           - |-
             oc get dc $(inputs.params.APP_NAME) -n $(inputs.params.DEPLOY_PROJECT)
+  workspaces:
+    - name: source
