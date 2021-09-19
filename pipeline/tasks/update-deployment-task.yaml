@@ -10,6 +10,10 @@ spec:
     - name: IMAGE
       description: Location of image to be patched with
       type: string
+    - name: project-name
+      description: Name of the project to apply manifests
+      type: string
+      default: "dev-env"
   steps:
     - name: patch
       image: image-registry.openshift-image-registry.svc:5000/openshift/cli:latest
@@ -21,4 +25,4 @@ spec:
               "name": "$(inputs.params.deployment)",
               "image":"$(inputs.params.IMAGE)"
             }]
-          }}}}'
+          }}}}' -n $(inputs.params.project-name)
