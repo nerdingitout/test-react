@@ -21,7 +21,7 @@ spec:
   steps:
       - name: test-app
         image: quay.io/openshift/origin-cli:latest
-        workingDir: /workspace/shared-workspace
+        workingDir: /workspace/source
         command: ["/bin/bash", "-c"]
         args:
           - |-
