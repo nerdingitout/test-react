@@ -25,63 +25,66 @@ spec:
     description: image to be build from the code
   tasks:
   - name: fetch-repository
+    params:
+      - name: url
+        value: $(params.git-url)
+      - name: subdirectory
+        value: $(params.git-dir)
+      - name: deleteExisting
+        value: 'true'
+      - name: revision
+        value: $(params.git-revision)
     taskRef:
+      kind: ClusterTask
       name: git-clone
-      kind: ClusterTask
     workspaces:
-    - name: output
-      workspace: shared-workspace
-    params:
-    - name: url
-      value: $(params.git-url)
-    - name: subdirectory
-      value: $(params.git-dir)
-    - name: deleteExisting
-      value: "true"
-    - name: revision
-      value: $(params.git-revision)
+      - name: output
+        workspace: shared-workspace
   - name: build-image
+    params:
+      - name: IMAGE
+        value: $(params.IMAGE)
+    runAfter:
+      - fetch-repository
     taskRef:
-      name: buildah
       kind: ClusterTask
-    params:
-    - name: IMAGE
-      value: $(params.IMAGE)
+      name: buildah
     workspaces:
-    - name: source
-      workspace: shared-workspace
-    runAfter:
-    - fetch-repository
-  - name: test-task
-    taskRef:
-      name: test-app
-    params:
-    - name: APP_NAME
-      value: $(params.deployment-name)
-    - name: APP_VERSION
-      value: "1.0"
-    - name: DEPLOY_PROJECT
-      value: "dev-env"
-    workspaces:
-    - name: source
-      workspace: shared-workspace
-    runAfter:
-    - build-image
+      - name: source
+        workspace: shared-workspace
   - name: apply-manifests
+    runAfter:
+      - build-image
     taskRef:
+      kind: Task
       name: apply-manifests
     workspaces:
-    - name: source
-      workspace: shared-workspace
-    runAfter:
-    - test-task
+      - name: source
+        workspace: shared-workspace
   - name: update-deployment
-    taskRef:
-      name: update-deployment
     params:
-    - name: deployment
-      value: $(params.deployment-name)
-    - name: IMAGE
-      value: $(params.IMAGE)
+      - name: deployment
+        value: $(params.deployment-name)
+      - name: IMAGE
+        value: $(params.IMAGE)
     runAfter:
-    - apply-manifests
+      - apply-manifests
+    taskRef:
+      kind: Task
+      name: update-deployment
+  - name: test-task
+    params:
+      - name: APP_NAME
+        value: $(params.deployment-name)
+      - name: APP_VERSION
+        value: '1.0'
+      - name: DEPLOY_PROJECT
+        value: dev-env
+    runAfter:
+      - update-deployment
+    taskRef:
+      kind: Task
+      name: test-app
+    workspaces:
+      - name: source
+        workspace: shared-workspace
