@@ -57,7 +57,7 @@ spec:
       name: test-app
     params:
     - name: APP_NAME
-      value: "react-ui"
+      value: $(params.deployment-name)
     - name: APP_VERSION
       value: "1.0"
     - name: DEPLOY_PROJECT
