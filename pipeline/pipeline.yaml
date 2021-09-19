@@ -52,7 +52,10 @@ spec:
     workspaces:
       - name: source
         workspace: shared-workspace
-  - name: apply-manifests
+  - name: dev-apply-manifests
+    params:
+      - name: project-name
+        value: dev-env
     runAfter:
       - build-image
     taskRef:
@@ -68,7 +71,7 @@ spec:
       - name: IMAGE
         value: $(params.IMAGE)
     runAfter:
-      - apply-manifests
+      - dev-apply-manifests
     taskRef:
       kind: Task
       name: update-deployment
@@ -85,6 +88,18 @@ spec:
     taskRef:
       kind: Task
       name: test-app
+    workspaces:
+      - name: source
+        workspace: shared-workspace
+  - name: promote-stage
+    params:
+      - name: project-name
+        value: stage-env
+    runAfter:
+      - test-task
+    taskRef:
+      kind: Task
+      name: apply-manifests
     workspaces:
       - name: source
         workspace: shared-workspace
